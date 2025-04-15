@@ -1,8 +1,12 @@
 ###########################################################################
-# SEIR functions
+# Code for the paper: 
+#   Hartvigsen, G. and Y. Dimitroff.
+#   Modeling the SARS-CoV-2 Epidemic and the Efficacy of
+#   Different Vaccines Across Different Network Structures
+#   PLoS One 2025
 # Gregg Hartvigsen
+# hartvig@geneseo.edu
 # SUNY Geneseo
-# ver 10-22-2020
 #-----------------------------------
 
 make.network = function(net.type,N,k,rewire.p){
@@ -147,7 +151,6 @@ prop.possible.match = function(s1, s2, n.loci, n.loci.for.mismatch) {
   # 1 means no protection, 0 = full protection
   return (1-partial.immunity)
 }
-
 
 #-------------------------------------------------------
 # needs to include vaccine efficacy
