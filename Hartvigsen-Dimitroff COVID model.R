@@ -1,9 +1,12 @@
-rand.seed = 1100 # reproducible results
+rand.seed = 1100 
 ###########################################################################
-# Network-Based SEIR model with vaccination and evolution of strains
+#   Hartvigsen, G. and Y. Dimitroff.
+#   Modeling the SARS-CoV-2 Epidemic and the Efficacy of
+#   Different Vaccines Across Different Network Structures
+#   PLoS One 2025
 # Gregg Hartvigsen
+# hartvig@geneseo.edu
 # SUNY Geneseo
-# ver 5-12-2021
 #-----------------------------
 #	This program builds and runs a discrete, individual-based
 # version of an SEIR model. (S)usceptible individuals become
@@ -20,14 +23,7 @@ rand.seed = 1100 # reproducible results
 # max.VE1 effective. Then another 21 days to become max.VE2
 # effective. Vaccine effectiveness does not decrease with time.
 
-# This version also includes evolution. A virus particle can
-# mutate as it moves from one host to another (mut.rate). The
-# number of loci for the spike protein can be up to 31 bitwise
-# loci (n.loci). The mismatch that leads to partial immunity
-# is explained in the file "partial immunity.r".
-
-# Currently vaccinating people regardless of their state. A lot get vaccinate
-#   after they've had disease so it's a waste.
+# Currently vaccinating people regardless of their state. 
 
 # This version keeps track of individuals in a list with 4
 # dataframes. The structure is:
@@ -47,19 +43,14 @@ rand.seed = 1100 # reproducible results
 
 # The list "inds" is sent around and updated by various functions.
 
-# Individuals now protected from reinfections for num.days.R days.
+# Individuals are protected from reinfections for num.days.R days.
 #   After this they return to the S class and may be infected (or
 #   protected from their vaccination and previous strains). This
 #   means that the number of R at any time is NOT the number that
 #   have gotten the illness.
         
-
-# To add:
-# 1. how many people are challenged and protected by prior infections
-#    as opposed to protected by a vaccine
 #------------------------------------------------------------
 # This installs igraph (only if you don't have it) and loads it.
-# rm(list = ls())
 if (!require(igraph)) {
   install.packages("igraph")
   library(igraph)
@@ -81,7 +72,7 @@ save.summary.data.file.name = "sum1.csv"
 show.time.step.graph = F # do ONLY if doing 1 rep
 show.n.strains.graph = F # do ONLY if doing 1 rep
 #VVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVV
-# Global parameter values that you can change with little risk
+# Global parameters
 N = 25000 # number of vertices
 R.naught = c(2.5, 5.0) # R.naught (required range: 0 <= R.naught <= k)
 num.E.T1 = 3
@@ -96,10 +87,10 @@ nreps = 1
 kill.on.this.day = 10000 # if it's going long. Make huge if needed
 #------------------------------------------
 # Vaccination parameters
-doses.prop.per.day = c(0, 0.003, 0.006, 0.009, 0.012) #c(0.005) # proportion of inds getting V1. V2 given after V1.days
+doses.prop.per.day = c(0, 0.003, 0.006, 0.009, 0.012) # proportion of inds getting V1. V2 given after V1.days
 vacc.strat = c("random","hubs")
 vaccinate.only.S = c(FALSE) # if F then vaccinate anyone including R
-vaccine.doses.per.person = c(1,2) # number vaccine doses tested (just 2 means 1 and 2)
+vaccine.doses.per.person = c(1,2) # number vaccine doses tested
 vacc.strain = 0 # strain to add like a strain inds recovered from
 vacc.crit.pop = 0 # when pop of E+I+R exceeds this begin vaccinating
 max.VE1 = seq(0.4, 0.75, by =0.05) # max efficacy of dose 1
@@ -107,7 +98,7 @@ max.VE2 = seq(0.75,0.9, by = 0.05) # max efficacy of dose 2
 V1.days = 21 # num days for immune system to reach max effectiveness
 V2.days = 21 # num days for immune system to reach max effectiveness
 #------------------------------------------
-# Evolution (achieved through mut.rate > 0)
+# Evolution (achieved if mut.rate > 0)
 mut.rate = 0 #seq(0, 0.001, by = 0.00025) #c(1e-3, 5e-4, 1e-4, 0)# prob. that a locus on strain is flipped when giving to host (should be small!)
 n.loci = 12 # length of virus strain in binary (up to 31 alloweds)
 n.loci.for.mismatch = 5 # more than this there is no partial immunity
